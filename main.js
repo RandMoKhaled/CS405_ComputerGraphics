@@ -27,16 +27,13 @@ const SHADER = `
   };  
   
   @vertex fn vs(@builtin(vertex_index) i: u32) -> VSOut {  
-    // Two triangles → a unit square, centred at origin.  
-    // Vertex order:  0,1,2  and  0,2,3  (triangle-strip-friendly ordering not used here;  
-    // we just list 6 vertices below so a single draw(6) works).  
     var p = array<vec2f, 6>(  
-      vec2f(-0.5, -0.5),   // 0  
-      vec2f( 0.5, -0.5),   // 1  
-      vec2f(-0.5,  0.5),   // 2  → triangle 1: 0,1,2  
-      vec2f(-0.5,  0.5),   // 3  
-      vec2f( 0.5, -0.5),   // 4  
-      vec2f( 0.5,  0.5)    // 5  → triangle 2: 3,4,5  
+      vec2f(-0.5, -0.5),    
+      vec2f( 0.5, -0.5),    
+      vec2f(-0.5,  0.5),  
+      vec2f(-0.5,  0.5),     
+      vec2f( 0.5, -0.5),   
+      vec2f( 0.5,  0.5)      
     );  
   
     var c = array<vec3f, 6>(  
@@ -88,7 +85,6 @@ const pipeline = device.createRenderPipeline({
   fragment: { module, entryPoint: 'fs', targets: [{ format }] }  
 });  
   
-// Uniform layout: time(f32) | aspect(f32) | mouse(vec2f)  = 16 bytes  
 const ubuf = device.createBuffer({  
   size: 16,  
   usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST  
@@ -105,17 +101,14 @@ const bind = device.createBindGroup({
 // ---------------------------------------------------------------------------  
   
 const t0 = performance.now();  
-  
-// Track mouse in normalized device coords (NDC):  x,y ∈ [-1, 1], y up.  
+    
 let mouseX = 0;  
 let mouseY = 0;  
   
 canvas.addEventListener('mousemove', (e) => {  
   const r = canvas.getBoundingClientRect();  
-  // 0..1 across the canvas  
   const nx = (e.clientX - r.left) / r.width;  
   const ny = (e.clientY - r.top ) / r.height;  
-  // map to NDC [-1,1]; flip Y because mouse y grows downward  
   mouseX =  nx * 2 - 1;  
   mouseY = -(ny * 2 - 1);  
 });  
@@ -132,10 +125,9 @@ resize();
 function frame() {  
   const t = (performance.now() - t0) * 0.001;  
   
-  // Aspect ratio of the drawing surface (width / height).  
   const aspect = canvas.width / canvas.height;  
   
-  // Uniform: [ time, aspect, mouseX, mouseY ]  
+  
   device.queue.writeBuffer(  
     ubuf, 0,  
     new Float32Array([t, aspect, mouseX, mouseY])  
