@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CS405 · Lab 3 — quaternions &amp; hierarchies (starter)</title>
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;background:#101114;color:#e8e6e1;font-family:system-ui,-apple-system,sans-serif;
+       display:grid;place-items:center;min-height:100vh}
+  .wrap{width:min(92vw,900px)}
+  canvas{width:100%;aspect-ratio:16/10;border-radius:10px;display:block;background:#0b0c0e}
+  .bar{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:14px;font-size:13px}
+  label{display:flex;flex-direction:column;gap:3px;color:#9a968f}
+  input[type=range]{width:180px}
+  button,select{background:#23252b;color:#e8e6e1;border:1px solid #3a3d45;border-radius:6px;
+                padding:5px 12px;font:inherit;cursor:pointer}
+  #readout{margin-top:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#8fb4d0}
+  p.note{font-size:13px;color:#9a968f;margin:12px 0 0;line-height:1.5}
+  code{color:#e8b07a}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <canvas></canvas>
+    <div class="bar">
+      <label>base spin (extra)<input id="base" type="range" min="-3.14" max="3.14" step="0.01" value="0"></label>
+      <label>pose blend t<input id="blend" type="range" min="0" max="1" step="0.002" value="0"></label>
+      <label>interpolation<select id="mode"><option value="slerp">slerp</option><option value="nlerp">nlerp</option></select></label>
+      <button id="play">pause</button>
+    </div>
+    <div id="readout"></div>
+    <p class="note">CS405 Lab 3 · a four-node hierarchy driven by quaternions, plus twelve instanced pillars —
+    <b>17 objects, one draw call</b>. Open the console for the <code>quat.js</code> self-test.</p>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
